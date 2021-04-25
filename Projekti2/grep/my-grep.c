@@ -4,22 +4,14 @@
 
 int main(int argc, char* argv[])
 {
-    if (argc < 2) {
+    if (argc < 2)
+    {
         fprintf(stderr, "my-grep: searchterm [file...]\n");
         exit(1);
-    } else if(argc == 2) {
-        //for some reason, passing exactly one cmdline argument will cause the program to do nothing
-        char *buffer = NULL;
-        size_t line_buffer = 0;
-        buffer = (char *)malloc(line_buffer + 1);
-        printf("give input to grep: ");
-        getline(&buffer, &line_buffer, stdin);
+    }
 
-        do {
-            if(strstr(buffer, argv[1]) != NULL) {
-                fprintf(stdout, "%s\n", buffer);
-            }
-        } while(getline(&buffer, &line_buffer, stdin) >= 0);
+    if(argc == 2) {
+        //tähän luku inputista
     } else {
         for(int i = 2; i < argc; i++) { //i = first argument that is a file in argv
             size_t line_buffer = 0; //dynamic buffer that scales
@@ -48,6 +40,9 @@ int main(int argc, char* argv[])
 
             fclose(file);
         }
+        exit(0);
     }
-    exit(0);
+
+
+    
 }

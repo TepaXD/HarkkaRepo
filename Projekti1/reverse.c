@@ -12,10 +12,10 @@ typedef struct NODE
 
 void readUserInput();
 void printFromFile(char *argv[]);
-void reverseList(Node** head);
+void reverseList(Node **head);
 void reverseToFile(char *argv[]);
-void reverse(char* begin, char* end);
-void reverseWords(char* s);
+void reverse(char *begin, char *end);
+void reverseWords(char *s);
 
 //main function
 int main(int argc, char *argv[])
@@ -30,29 +30,31 @@ int main(int argc, char *argv[])
     {
         readUserInput();
     }
-    else if(argc == 2) {
+    else if (argc == 2)
+    {
         printFromFile(argv);
     }
-    else if(argc == 3) {
-        if (strcmp(argv[1],argv[2]) == 0)
+    else if (argc == 3)
     {
-        fprintf(stderr, "input and output file must differ\n");
-        exit(1);
-    }
+        if (strcmp(argv[1], argv[2]) == 0)
+        {
+            fprintf(stderr, "input and output file must differ\n");
+            exit(1);
+        }
         reverseToFile(argv);
     }
-    return 0;
+    exit(0);
 }
 
 //method that reads user input
 void readUserInput()
 {
     char *buffer = NULL;
-    size_t line_buf_size = 0;
+    size_t line_buffer = 0;
 
-    buffer = (char *)malloc(line_buf_size+1);
+    buffer = (char *)malloc(line_buffer + 1);
     printf("give input to reverse: ");
-    getline(&buffer, &line_buf_size, stdin);
+    getline(&buffer, &line_buffer, stdin);
 
     reverseWords(buffer);
     fprintf(stdout, "%s\n", buffer);
@@ -60,34 +62,38 @@ void readUserInput()
 
 //tutorial for these two methods below was found in https://www.geeksforgeeks.org/reverse-words-in-a-given-string/
 //their point is to mirror users input
-void reverse(char* begin, char* end)
+void reverse(char *begin, char *end)
 {
-    char temp;
-    while (begin < end) {
-        temp = *begin;
+    char temporary;
+    while (begin < end)
+    {
+        temporary = *begin;
         *begin++ = *end;
         *end-- = temporary;
     }
 }
- 
+
 // Function to reverse words*/
-void reverseWords(char* input)
+void reverseWords(char *input)
 {
-    char* word_begin = input;
- 
-    char* temporary = input;
- 
-    while (*temporary) {
+    char *word_begin = input;
+
+    char *temporary = input;
+
+    while (*temporary)
+    {
         temporary++;
-        if (*temporary == '\0') {
+        if (*temporary == '\0')
+        {
             reverse(word_begin, temporary - 2);
         }
-        else if (*temporary == ' ') {
+        else if (*temporary == ' ')
+        {
             reverse(word_begin, temporary - 1);
             word_begin = temporary + 1;
         }
     }
- 
+
     reverse(input, temporary - 1);
 }
 
@@ -96,13 +102,12 @@ void reverseWords(char* input)
 void printFromFile(char *argv[])
 {
     char *buffer = NULL;
-    size_t line_buf_size = 0;
+    size_t line_buffer = 0;
     FILE *file;
     ssize_t line_size;
     Node *current, *head;
 
     head = current = NULL;
-
 
     file = fopen(argv[1], "r");
 
@@ -112,45 +117,52 @@ void printFromFile(char *argv[])
         exit(1);
     }
 
-    line_size = getline(&buffer, &line_buf_size, file);
+    line_size = getline(&buffer, &line_buffer, file);
 
-    do {
+    do
+    {
         Node *node = malloc(sizeof(Node));
-        if(node == NULL) {
-            fprintf(stderr, "malloc failed");
+        if (node == NULL)
+        {
+            fprintf(stderr, "malloc failed\n");
             exit(1);
         }
         node->data = strdup(buffer);
         node->next = NULL;
 
-        if(head == NULL){
+        if (head == NULL)
+        {
             current = head = node;
-        } else {
+        }
+        else
+        {
             current = current->next = node;
         }
 
-        line_size = getline(&buffer, &line_buf_size, file);
+        line_size = getline(&buffer, &line_buffer, file);
     } while (line_size >= 0);
-    
+
     free(buffer);
     buffer = NULL;
     fclose(file);
 
     printf("\n");
     reverseList(&head);
-    for(current = head; current; current = current->next) {
-        fprintf(stdout,"%s", current->data);
+    for (current = head; current; current = current->next)
+    {
+        fprintf(stdout, "%s", current->data);
     }
 }
 
 //method to reverse a linked list
-void reverseList(Node** head)
+void reverseList(Node **head)
 {
-    Node* previous = NULL;
-    Node* current = *head;
-    Node* next = NULL;
-    
-    while(current != NULL) {
+    Node *previous = NULL;
+    Node *current = *head;
+    Node *next = NULL;
+
+    while (current != NULL)
+    {
         next = current->next;
         current->next = previous;
         previous = current;
@@ -159,13 +171,13 @@ void reverseList(Node** head)
     *head = previous;
 
     Node *temp = *head;
-    }
+}
 
 //saves content from file like earlier, but saves it to an output file
 void reverseToFile(char *argv[])
-    {
+{
     char *buffer = NULL;
-    size_t line_buf_size = 0;
+    size_t line_buffer = 0;
     FILE *inputfile;
     FILE *outputfile;
     ssize_t line_size;
@@ -181,36 +193,43 @@ void reverseToFile(char *argv[])
         exit(1);
     }
 
-    line_size = getline(&buffer, &line_buf_size, inputfile);
+    line_size = getline(&buffer, &line_buffer, inputfile);
 
-    do {
+    do
+    {
         Node *node = malloc(sizeof(Node));
-        if(node == NULL) {
-            fprintf(stderr, "malloc failed");
+        if (node == NULL)
+        {
+            fprintf(stderr, "malloc failed\n");
             exit(1);
         }
         node->data = strdup(buffer);
         node->next = NULL;
 
-        if(head == NULL){
+        if (head == NULL)
+        {
             current = head = node;
-        } else {
+        }
+        else
+        {
             current = current->next = node;
         }
 
-        line_size = getline(&buffer, &line_buf_size, inputfile);
+        line_size = getline(&buffer, &line_buffer, inputfile);
     } while (line_size >= 0);
     free(buffer);
     buffer = NULL;
     fclose(inputfile);
 
     outputfile = fopen(argv[2], "w");
-    if(outputfile == NULL) {
+    if (outputfile == NULL)
+    {
         fprintf(stderr, "error: cannot open file '%s'\n", argv[2]);
         exit(1);
     }
     reverseList(&head);
-    for(current = head; current; current = current->next) {
+    for (current = head; current; current = current->next)
+    {
         fprintf(outputfile, "%s", current->data);
     }
-    }
+}
