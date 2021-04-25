@@ -1,0 +1,77 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdint.h>
+
+void readUserInput();
+char printFromFile(char *argv[]);
+typedef struct Node
+{
+    char *data;
+    struct Node *next;
+};
+
+int main(int argc, char *argv[])
+{
+    if (argc > 3)
+    {
+        fprintf(stderr, "usage: reverse <input> <output>\n");
+        exit(1);
+    }
+
+    if (argv[1] == argv[2])
+    {
+        fprintf(stderr, "input and output file must differ\n");
+        exit(1);
+    }
+
+    if (argc == 1)
+    {
+        readUserInput();
+    }
+
+    printFromFile(argv);
+
+    exit(0);
+}
+
+void readUserInput()
+{
+    char input[10];
+    printf("give input to reverse: ");
+    scanf("%s", &input);
+}
+
+char printFromFile(char *argv[])
+{
+    char *buffer = NULL;
+    FILE *file;
+    long length;
+    file = fopen(argv[1], "r");
+
+    if (file == NULL)
+    {
+        fprintf(stderr, "error: cannot open file '%s'\n", argv[1]);
+        exit(1);
+    }
+    else
+    {
+        fseek(file, 0, SEEK_END);
+        length = ftell(file);
+        fseek(file, 0, SEEK_SET);
+        buffer = malloc(length);
+        if (buffer)
+        {
+            fread(buffer, 1, length, file);
+        }
+        fclose(file);
+    }
+    
+    while (fgets(buffer, sizeof(buffer), file))
+    {
+        printf("%s", buffer);
+    }
+    free(buffer);
+    buffer = NULL;
+    fclose(file);
+}
